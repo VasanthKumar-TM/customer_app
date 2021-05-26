@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_app/models/dish.dart';
+// import 'package:customer_app/models/dish.dart';
 import 'package:customer_app/routes/router.gr.dart';
 import 'package:customer_app/values/values.dart';
 import 'package:customer_app/widgets/custom_drawer.dart';
@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<List<DishType>> dishes;
+  // Future<List<DishType>> dishes;
   String _selectedTab;
   var arr = ['Foods', 'Drinks', 'Snacks', 'Drinks'];
   var foodData, length;
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    dishes = loadDishes();
+    // dishes = loadDishes();
     _selectedTab = Routes.homeScreen;
     foodDetails();
   }
@@ -57,7 +57,124 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Flexible(flex: 2, child: _buildUpper(context)),
-            Flexible(flex: 3, child: _buildDishTabs()),
+            Flexible(
+              flex: 3,
+              child: DefaultTabController(
+                length: arr.length,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Sizes.SIZE_30,
+                        ),
+                        child: TabBar(
+                          isScrollable: true,
+                          labelColor: Colors.pinkAccent,
+                          labelStyle:
+                              Theme.of(context).textTheme.subtitle1.copyWith(
+                                    fontFamily: StringConst.SF_PRO_TEXT,
+                                  ),
+                          labelPadding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.SIZE_30,
+                          ),
+                          unselectedLabelColor: AppColors.black50,
+                          tabs: List.generate(
+                            arr.length,
+                            (i) => Tab(text: arr[i]),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      flex: 8,
+                      child: TabBarView(
+                        children: List.generate(
+                          arr.length,
+                          (i) => ListView.builder(
+                            padding: const EdgeInsets.only(
+                              top: Sizes.SIZE_60,
+                            ),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final dish = arr[index];
+                              return Container(
+                                width: MediaQuery.of(context).size.width / 2,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: Sizes.SIZE_20,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        Sizes.SIZE_30,
+                                      ),
+                                      boxShadow: [Shadows.dishCard],
+                                      color: Colors.white,
+                                    ),
+                                    child: Stack(
+                                      overflow: Overflow.visible,
+                                      children: [
+                                        Transform.translate(
+                                          offset: Offset(0.0, -40.0),
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                maxWidth: 120.0,
+                                                maxHeight: 120.0,
+                                              ),
+                                              child: Image.network(
+                                                foodData[index]['foodpic'],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: const Alignment(0.0, 0.2),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 35.0,
+                                                horizontal: Sizes.SIZE_20),
+                                            child: Text(
+                                              foodData[index]['_id'],
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4
+                                                  .copyWith(
+                                                      color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment(0.0, 0.6),
+                                          child: Text(
+                                            foodData[index]['foodprice'],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5
+                                                .copyWith(color: Colors.pink),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -191,14 +308,14 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  void _onDishCardPressed(Dish dish) {
-    ExtendedNavigator.root.push(
-      Routes.dishInfoScreen,
-      arguments: DishInfoScreenArguments(
-        dish: dish,
-      ),
-    );
-  }
+  // void _onDishCardPressed(Dish dish) {
+  //   ExtendedNavigator.root.push(
+  //     Routes.dishInfoScreen,
+  //     arguments: DishInfoScreenArguments(
+  //       dish: dish,
+  //     ),
+  //   );
+  // }
 
   void details() async {
     final String url = 'https://apifoodapp.herokuapp.com/infoUser';
@@ -240,139 +357,6 @@ class _HomePageState extends State<HomePage> {
       print(foodData);
       length = foodData.length;
     }
-  }
-
-  FutureBuilder<List<DishType>> _buildDishTabs() {
-    return FutureBuilder(
-      future: dishes,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<DishType>> snapshot,
-      ) {
-        if (snapshot.hasData) {
-          final List<DishType> data = snapshot.data;
-          final categories = data.map((dish) => dish.name).toList();
-          final categoryDishes = data.map((dish) => dish.dishes).toList();
-
-          return DefaultTabController(
-            length: categories.length,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Sizes.SIZE_30,
-                    ),
-                    child: TabBar(
-                      isScrollable: true,
-                      labelColor: Colors.pinkAccent,
-                      labelStyle:
-                          Theme.of(context).textTheme.subtitle1.copyWith(
-                                fontFamily: StringConst.SF_PRO_TEXT,
-                              ),
-                      labelPadding: const EdgeInsets.symmetric(
-                        horizontal: Sizes.SIZE_30,
-                      ),
-                      unselectedLabelColor: AppColors.black50,
-                      tabs: List.generate(
-                        arr.length,
-                        (i) => Tab(text: arr[i]),
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 8,
-                  child: TabBarView(
-                    children: List.generate(
-                      categories.length,
-                      (i) => ListView.builder(
-                        padding: const EdgeInsets.only(
-                          top: Sizes.SIZE_60,
-                        ),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final dish = arr[index];
-                          return Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: Sizes.SIZE_20,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    Sizes.SIZE_30,
-                                  ),
-                                  boxShadow: [Shadows.dishCard],
-                                  color: Colors.white,
-                                ),
-                                child: Stack(
-                                  overflow: Overflow.visible,
-                                  children: [
-                                    Transform.translate(
-                                      offset: Offset(0.0, -40.0),
-                                      child: Align(
-                                        alignment: Alignment.topCenter,
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxWidth: 120.0,
-                                            maxHeight: 120.0,
-                                          ),
-                                          child: Image.asset(
-                                            foodData[index]['foodpic'],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: const Alignment(0.0, 0.2),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 35.0,
-                                            horizontal: Sizes.SIZE_20),
-                                        child: Text(
-                                          foodData[index]['_id'],
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4
-                                              .copyWith(color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment(0.0, 0.6),
-                                      child: Text(
-                                        foodData[index]['foodprice'],
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            .copyWith(color: Colors.pink),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
-    );
   }
 
   void _navigateToSearchPage() {
