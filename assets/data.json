@@ -1,0 +1,88 @@
+{
+  "Foods": [
+    {
+      "id": 1,
+      "name": "Honey Chicken",
+      "price": 250,
+      "image": "assets/images/honeychickf.png"
+    },
+    {
+      "id": 2,
+      "name": "Chicken Fried Rice",
+      "price": 230.99,
+      "image": "assets/images/chickenfried.png"
+    },
+    {
+      "id": 3,
+      "name": "Mutton Biriyani",
+      "price": 299.99,
+      "image": "assets/images/biryani.png"
+    },
+    {
+      "id": 4,
+      "name": "chicken Nuggets",
+      "price": 349.99,
+      "image": "assets/images/chicknugg.png"
+    }
+  ],
+  "Drinks": [
+    {
+      "id": 5,
+      "name": "Oreo Milkshake",
+      "price": 79.99,
+      "image": "assets/images/oreomilk.png"
+    },
+    {
+      "id": 6,
+      "name": "Cold Rock Coffee",
+      "price": 59.99,
+      "image": "assets/images/coldcoffee.png"
+    },
+    {
+      "id": 7,
+      "name": "Pista Lassie",
+      "price": 91.99,
+      "image": "assets/images/pistamilk.png"
+    }
+  ],
+  "Snacks": [
+    {
+      "id": 8,
+      "name": "French Fries",
+      "price": 49.99,
+      "image": "assets/images/frenchfries.png"
+    },
+    {
+      "id": 9,
+      "name": "Samosa",
+      "price": 149.99,
+      "image": "assets/images/samosa.png"
+    },
+    {
+      "id": 10,
+      "name": "Burger",
+      "price": 100.99,
+      "image": "assets/images/burger.png"
+    }
+  ],
+  "Desserts": [
+    {
+      "id": 11,
+      "name": "Hot Choco Cake",
+      "price": 799.99,
+      "image": "assets/images/hotcake.png"
+    },
+    {
+      "id": 12,
+      "name": "Choco Cup cakes",
+      "price": 49.99,
+      "image": "assets/images/cupcake.png"
+    },
+    {
+      "id": 13,
+      "name": "Choco Falooda",
+      "price": 249.99,
+      "image": "assets/images/Chocofalo.png"
+    }
+  ]
+}
