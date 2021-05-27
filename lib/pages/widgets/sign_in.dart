@@ -9,6 +9,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:customer_app/values/user.dart';
 import 'package:customer_app/models/profile.dart';
 
+import 'package:customer_app/foodDetailsVar.dart';
+
 class SignIn extends StatefulWidget {
   const SignIn({Key key}) : super(key: key);
 
@@ -34,6 +36,30 @@ class _SignInState extends State<SignIn> {
     focusNodeEmail.dispose();
     focusNodePassword.dispose();
     super.dispose();
+  }
+
+  void foodDetails() async {
+    print('came');
+    final String url = 'https://apifoodapp.herokuapp.com/infoFood';
+
+    // Map<String, dynamic> data = <String, dynamic>{
+    //   '': '',
+    // };
+
+    http.Response response = await http.post(Uri.parse(url));
+
+    var info = response.body;
+    // print(info);
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      var valueMap = json.decode(data);
+      foodData = valueMap;
+      print(foodData);
+      length = foodData.length;
+      print(length);
+      isLoad = true;
+    }
   }
 
   void signIn(String userN, dynamic pass) async {
@@ -249,6 +275,7 @@ class _SignInState extends State<SignIn> {
                                   : {
                                       print("123"),
                                       signIn(userName.toString(), passWord),
+                                      foodDetails(),
                                       USERNAME = userName,
                                       setState(() => _loading = false),
                                     },

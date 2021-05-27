@@ -11,6 +11,8 @@ import 'package:customer_app/values/user.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:customer_app/foodDetailsVar.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
 
@@ -30,15 +32,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Future<List<DishType>> dishes;
   String _selectedTab;
-  var arr = ['Foods', 'Drinks', 'Snacks', 'Drinks'];
-  var foodData, length;
+  var arr = ['Foods', 'Drinks', 'Snacks', 'Drinks', 'xxx'];
+  // var foodData, length;
+  // bool isLoad = false;
 
   @override
   void initState() {
     super.initState();
     // dishes = loadDishes();
     _selectedTab = Routes.homeScreen;
-    foodDetails();
+    // foodDetails();
   }
 
   Color getIndicatorColor({String tab}) {
@@ -101,70 +104,83 @@ class _HomePageState extends State<HomePage> {
                             itemCount: length,
                             itemBuilder: (BuildContext context, int index) {
                               final dish = arr[index];
+                              print(index);
                               return Container(
                                 width: MediaQuery.of(context).size.width / 2,
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: Sizes.SIZE_20,
                                 ),
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        Sizes.SIZE_30,
-                                      ),
-                                      boxShadow: [Shadows.dishCard],
-                                      color: Colors.white,
-                                    ),
-                                    child: Stack(
-                                      overflow: Overflow.visible,
-                                      children: [
-                                        Transform.translate(
-                                          offset: Offset(0.0, -40.0),
-                                          child: Align(
-                                            alignment: Alignment.topCenter,
-                                            child: ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                maxWidth: 120.0,
-                                                maxHeight: 120.0,
-                                              ),
-                                              child: Image.network(
-                                                foodData[index]['foodpic'],
-                                              ),
+                                child: isLoad
+                                    ? GestureDetector(
+                                        onTap: () {},
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              Sizes.SIZE_30,
                                             ),
+                                            boxShadow: [Shadows.dishCard],
+                                            color: Colors.white,
+                                          ),
+                                          child: Stack(
+                                            // overflow: Overflow.visible,
+                                            children: [
+                                              Transform.translate(
+                                                offset: Offset(0.0, -40.0),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: ConstrainedBox(
+                                                    constraints: BoxConstraints(
+                                                      maxWidth: 120.0,
+                                                      maxHeight: 120.0,
+                                                    ),
+                                                    child: Image.network(
+                                                      foodData[index]
+                                                          ['foodpic'],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    const Alignment(0.0, 0.2),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 35.0,
+                                                      horizontal:
+                                                          Sizes.SIZE_20),
+                                                  child: Text(
+                                                    foodData[index]['_id'],
+                                                    textAlign: TextAlign.center,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline4
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black),
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: Alignment(0.0, 0.6),
+                                                child: Text(
+                                                  '₹ ' +
+                                                      foodData[index]
+                                                          ['foodprice'] +
+                                                      '/-',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline5
+                                                      .copyWith(
+                                                          color: Colors.pink),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Align(
-                                          alignment: const Alignment(0.0, 0.2),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 35.0,
-                                                horizontal: Sizes.SIZE_20),
-                                            child: Text(
-                                              foodData[index]['_id'],
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  .copyWith(
-                                                      color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment(0.0, 0.6),
-                                          child: Text(
-                                            foodData[index]['foodprice'],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5
-                                                .copyWith(color: Colors.pink),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                      )
+                                    : Container(),
                               );
                             },
                           ),
@@ -337,27 +353,29 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void foodDetails() async {
-    print('came');
-    final String url = 'https://apifoodapp.herokuapp.com/infoFood';
-
-    // Map<String, dynamic> data = <String, dynamic>{
-    //   '': '',
-    // };
-
-    http.Response response = await http.post(Uri.parse(url));
-
-    var info = response.body;
-    // print(info);
-
-    if (response.statusCode == 200) {
-      String data = response.body;
-      var valueMap = json.decode(data);
-      foodData = valueMap;
-      print(foodData);
-      length = foodData.length;
-    }
-  }
+  // void foodDetails() async {
+  //   print('came');
+  //   final String url = 'https://apifoodapp.herokuapp.com/infoFood';
+  //
+  //   // Map<String, dynamic> data = <String, dynamic>{
+  //   //   '': '',
+  //   // };
+  //
+  //   http.Response response = await http.post(Uri.parse(url));
+  //
+  //   var info = response.body;
+  //   // print(info);
+  //
+  //   if (response.statusCode == 200) {
+  //     String data = response.body;
+  //     var valueMap = json.decode(data);
+  //     foodData = valueMap;
+  //     print(foodData);
+  //     length = foodData.length;
+  //     print(length);
+  //     isLoad = true;
+  //   }
+  // }
 
   void _navigateToSearchPage() {
     ExtendedNavigator.root.push(Routes.searchScreen);

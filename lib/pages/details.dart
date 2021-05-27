@@ -9,6 +9,8 @@ import 'package:customer_app/utils/bubble_indicator_painter.dart';
 import 'package:customer_app/values/user.dart';
 import 'dart:convert';
 
+import 'package:customer_app/foodDetailsVar.dart';
+
 var username,
     password,
     fullName,
@@ -73,6 +75,30 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
     focusNodeNumber.dispose();
     focusNodeProfile.dispose();
     super.dispose();
+  }
+
+  void foodDetails() async {
+    print('came');
+    final String url = 'https://apifoodapp.herokuapp.com/infoFood';
+
+    // Map<String, dynamic> data = <String, dynamic>{
+    //   '': '',
+    // };
+
+    http.Response response = await http.post(Uri.parse(url));
+
+    var info = response.body;
+    // print(info);
+
+    if (response.statusCode == 200) {
+      String data = response.body;
+      var valueMap = json.decode(data);
+      foodData = valueMap;
+      print(foodData);
+      length = foodData.length;
+      print(length);
+      isLoad = true;
+    }
   }
 
   void signUp(usernameN, passwordN, fullNameN, phnumberN, mailN, addressN,
@@ -515,6 +541,7 @@ class _DetailsState extends State<Details> with SingleTickerProviderStateMixin {
                                                         mail,
                                                         address,
                                                         profilepic),
+                                                    foodDetails(),
                                                     setState(
                                                         () => _loading = false),
                                                   },
