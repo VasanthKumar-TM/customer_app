@@ -59,136 +59,158 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Flexible(flex: 2, child: _buildUpper(context)),
-            Flexible(
-              flex: 3,
-              child: DefaultTabController(
-                length: arr.length,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.SIZE_30,
-                        ),
-                        child: TabBar(
-                          isScrollable: true,
-                          labelColor: Colors.pinkAccent,
-                          labelStyle:
-                              Theme.of(context).textTheme.subtitle1.copyWith(
-                                    fontFamily: StringConst.SF_PRO_TEXT,
-                                  ),
-                          labelPadding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.SIZE_30,
-                          ),
-                          unselectedLabelColor: AppColors.black50,
-                          tabs: List.generate(
-                            arr.length,
-                            (i) => Tab(text: arr[i]),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 8,
-                      child: TabBarView(
-                        children: List.generate(
-                          arr.length,
-                          (i) => ListView.builder(
-                            padding: const EdgeInsets.only(
-                              top: Sizes.SIZE_60,
-                            ),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final dish = arr[index];
-                              print(index);
-                              return Container(
-                                width: MediaQuery.of(context).size.width / 2,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.SIZE_20,
-                                ),
-                                child: isLoad
-                                    ? GestureDetector(
-                                        onTap: () {},
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              Sizes.SIZE_30,
-                                            ),
-                                            boxShadow: [Shadows.dishCard],
-                                            color: Colors.white,
-                                          ),
-                                          child: Stack(
-                                            // overflow: Overflow.visible,
-                                            children: [
-                                              Transform.translate(
-                                                offset: Offset(0.0, -40.0),
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.topCenter,
-                                                  child: ConstrainedBox(
-                                                    constraints: BoxConstraints(
-                                                      maxWidth: 120.0,
-                                                      maxHeight: 120.0,
-                                                    ),
-                                                    child: Image.network(
-                                                      foodData[index]
-                                                          ['foodpic'],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    const Alignment(0.0, 0.2),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 35.0,
-                                                      horizontal:
-                                                          Sizes.SIZE_20),
-                                                  child: Text(
-                                                    foodData[index]['_id'],
-                                                    textAlign: TextAlign.center,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline4
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.black),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment(0.0, 0.6),
-                                                child: Text(
-                                                  '₹ ' +
-                                                      foodData[index]
-                                                          ['foodprice'] +
-                                                      '/-',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline5
-                                                      .copyWith(
-                                                          color: Colors.pink),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            // Flexible(flex: 1, child: _buildUpper(context)),
+            _buildSearchButton(context),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(Sizes.SIZE_30),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisSpacing: 30,
+                  mainAxisSpacing: 30,
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
                 ),
+                itemCount: length,
+                itemBuilder: (BuildContext context, int index) {
+                  final double isFirstMargin =
+                      index == 0 ? Sizes.SIZE_20 : Sizes.SIZE_12;
+                  final double isLastMargin =
+                      index == length - 1 ? Sizes.SIZE_20 : Sizes.SIZE_12;
+
+                  if (index % 2 != 0) {
+                    return Transform(
+                      transform: Matrix4.identity()..translate(0.0, 60.0),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: isFirstMargin,
+                          bottom: isLastMargin,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                Sizes.SIZE_30,
+                              ),
+                              boxShadow: [Shadows.dishCard],
+                              color: Colors.white,
+                            ),
+                            child: Stack(
+                              overflow: Overflow.visible,
+                              children: [
+                                Transform.translate(
+                                  offset: Offset(0.0, -40.0),
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: 100.0,
+                                        maxHeight: 100.0,
+                                      ),
+                                      child: Image.network(
+                                        foodData[index]['foodpic'],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: const Alignment(0.0, 0.2),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 35.0,
+                                        horizontal: Sizes.SIZE_20),
+                                    child: Text(
+                                      foodData[index]['_id'],
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment(0.0, 0.6),
+                                  child: Text(
+                                    '₹ ' + foodData[index]['foodprice'] + '/-',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5
+                                        .copyWith(color: AppColors.red200),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Container(
+                    margin: EdgeInsets.only(
+                      top: isFirstMargin,
+                      bottom: isLastMargin,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            Sizes.SIZE_30,
+                          ),
+                          boxShadow: [Shadows.dishCard],
+                          color: Colors.white,
+                        ),
+                        child: Stack(
+                          overflow: Overflow.visible,
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0.0, -40.0),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: 100.0,
+                                    maxHeight: 100.0,
+                                  ),
+                                  child: Image.network(
+                                    foodData[index]['foodpic'],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: const Alignment(0.0, 0.2),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 35.0, horizontal: Sizes.SIZE_20),
+                                child: Text(
+                                  foodData[index]['_id'],
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      .copyWith(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment(0.0, 0.6),
+                              child: Text(
+                                '₹ ' + foodData[index]['foodprice'] + '/-',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    .copyWith(color: AppColors.red200),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -384,6 +406,7 @@ class _HomePageState extends State<HomePage> {
   FractionallySizedBox _buildSearchButton(BuildContext context) {
     return FractionallySizedBox(
       widthFactor: 0.9,
+      // heightFactor: 0.3,
       child: GestureDetector(
         onTap: _navigateToSearchPage,
         child: Container(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:customer_app/models/dish.dart';
 import 'package:customer_app/values/values.dart';
 import 'package:customer_app/widgets/custom_icon.dart';
-import 'package:customer_app/widgets/search_dish_card.dart';
+// import 'package:customer_app/widgets/search_dish_card.dart';
+
+import 'package:customer_app/foodDetailsVar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key key}) : super(key: key);
@@ -180,12 +182,12 @@ class _SearchScreenState extends State<SearchScreen> {
           crossAxisCount: 2,
           childAspectRatio: 0.7,
         ),
-        itemCount: _dishList.length,
+        itemCount: length,
         itemBuilder: (BuildContext context, int index) {
           final double isFirstMargin =
               index == 0 ? Sizes.SIZE_20 : Sizes.SIZE_12;
           final double isLastMargin =
-              index == _dishList.length - 1 ? Sizes.SIZE_20 : Sizes.SIZE_12;
+              index == length - 1 ? Sizes.SIZE_20 : Sizes.SIZE_12;
 
           if (index % 2 != 0) {
             return Transform(
@@ -195,8 +197,62 @@ class _SearchScreenState extends State<SearchScreen> {
                   top: isFirstMargin,
                   bottom: isLastMargin,
                 ),
-                child: SearchDishCard(
-                  dish: _dishList[index],
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        Sizes.SIZE_30,
+                      ),
+                      boxShadow: [Shadows.dishCard],
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      overflow: Overflow.visible,
+                      children: [
+                        Transform.translate(
+                          offset: Offset(0.0, -40.0),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: 100.0,
+                                maxHeight: 100.0,
+                              ),
+                              child: Image.network(
+                                foodData[index]['foodpic'],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: const Alignment(0.0, 0.2),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 35.0, horizontal: Sizes.SIZE_20),
+                            child: Text(
+                              foodData[index]['_id'],
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  .copyWith(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment(0.0, 0.6),
+                          child: Text(
+                            '₹ ' + foodData[index]['foodprice'] + '/-',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline5
+                                .copyWith(color: AppColors.red200),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );
@@ -207,8 +263,62 @@ class _SearchScreenState extends State<SearchScreen> {
               top: isFirstMargin,
               bottom: isLastMargin,
             ),
-            child: SearchDishCard(
-              dish: _dishList[index],
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    Sizes.SIZE_30,
+                  ),
+                  boxShadow: [Shadows.dishCard],
+                  color: Colors.white,
+                ),
+                child: Stack(
+                  overflow: Overflow.visible,
+                  children: [
+                    Transform.translate(
+                      offset: Offset(0.0, -40.0),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 100.0,
+                            maxHeight: 100.0,
+                          ),
+                          child: Image.network(
+                            foodData[index]['foodpic'],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: const Alignment(0.0, 0.2),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 35.0, horizontal: Sizes.SIZE_20),
+                        child: Text(
+                          foodData[index]['_id'],
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              .copyWith(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment(0.0, 0.6),
+                      child: Text(
+                        '₹ ' + foodData[index]['foodprice'] + '/-',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5
+                            .copyWith(color: AppColors.red200),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         },

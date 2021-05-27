@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:customer_app/foodDetailsVar.dart';
+
 part 'dish.g.dart';
 
 @JsonSerializable(explicitToJson: true)
